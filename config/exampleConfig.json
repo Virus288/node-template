@@ -1,0 +1,4 @@
+{
+  "httpPort": 80,
+  "corsOrigin": "*"
+}

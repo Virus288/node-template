@@ -1,0 +1,62 @@
+{
+  "name": "node_template",
+  "version": "0.0.1",
+  "description": "Node template",
+  "productName": "Node_template",
+  "author": "https://github.com/Virus288",
+  "license": "Apache-2.0",
+  "private": false,
+  "scripts": {
+    "start": "cross-env NODE_ENV=prod node build/src/main.js",
+    "dev": "cross-env NODE_ENV=dev nodemon build/src/main.js",
+    "clean": "rimraf coverage build tmp",
+    "prebuild": "npm run lint",
+    "build": "tsc -p tsconfig.release.json",
+    "build:watch": "tsc -w -p tsconfig.release.json",
+    "lint": "cross-env NODE_ENV=development eslint . --ext .ts",
+    "listErrors": "node_modules/.bin/tsc --noEmit --skipLibCheck",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{ts}": [
+      "cross-env NODE_ENV=development eslint --cache"
+    ],
+    "*.json,.{eslintrc,prettierrc}": [
+      "prettier --ignore-path .eslintignore --parser json --write"
+    ]
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "lint-staged": "^13.0.3",
+    "node": "^18.7.0",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/node": "^18.6.2",
+    "@typescript-eslint/eslint-plugin": "^5.42.1",
+    "@typescript-eslint/parser": "^5.42.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.20.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.1",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0",
+    "supertest": "^6.2.4",
+    "ts-node": "^10.9.1",
+    "tsutils": "^3.21.0",
+    "typescript": "^4.7.0"
+  }
+}

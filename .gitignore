@@ -1,0 +1,65 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules/
+
+# Coverage
+coverage
+
+# Transpiled files
+build/
+
+# VS Code
+.vscode
+!.vscode/tasks.js
+
+# JetBrains IDEs
+.idea/
+
+# Optional npm cache directory
+.npm
+yarn.lock
+
+# Optional eslint cache
+.eslintcache
+
+# Misc
+.DS_Store
+dist/
+/dist
+dist
+package-lock.json
+
+/img/**/*
+img/*
+img/
+/img
+
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+yarn-debug.log*
+yarn-error.log*
+/.temp_img/*
+/.temp_audio/*
+/.VSCodeCounter
+
+# Config files
+config/devConfig.json
+config/prodConfig.json
