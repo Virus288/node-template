@@ -2,3 +2,4 @@
 . "$(dirname "$0")/_/husky.sh"
 
 npx lint-staged
+node ./node_modules/.bin/tsc --skipLibCheck
