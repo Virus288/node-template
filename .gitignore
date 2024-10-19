@@ -1,5 +1,4 @@
 # Logs
-logs
 *.log
 npm-debug.log*
 
@@ -28,10 +27,6 @@ yarn.lock
 
 # Misc
 .DS_Store
-dist/
-/dist
-dist
-package-lock.json
 
 /img/**/*
 img/*
@@ -41,12 +36,6 @@ img/
 /node_modules
 /.pnp
 .pnp.js
-
-# testing
-/coverage
-
-# production
-/build
 
 # misc
 .env.local
@@ -63,3 +52,7 @@ yarn-error.log*
 # Config files
 config/devConfig.json
 config/prodConfig.json
+config/testConfig.json
+
+# K8s
+.livenessProbe

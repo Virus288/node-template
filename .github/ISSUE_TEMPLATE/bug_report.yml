@@ -1,0 +1,38 @@
+name: Bug Report
+description: File a bug report here
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Before submitting new issue, please make sure similar problem/idea hasn't been already submitted by someone else. 😃
+
+  - type: textarea
+    id: reproducibility
+    attributes:
+      label: Reproducibility
+      description: How often does this problems occurs. Every time you do something ? After time of inactivity ? Once a day ?
+    validations:
+      required: true
+
+  - type: textarea
+    id: stepsToReproduce
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce this error ? Try to be as detailed as possible
+    validations:
+      required: true
+
+  - type: textarea
+    id: expectedResult
+    attributes:
+      label: What did you expect to happened ?
+    validations:
+      required: true
+
+  - type: textarea
+    id: whatHappened
+    attributes:
+      label: What actually happened ?
+    validations:
+      required: true

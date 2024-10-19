@@ -1,0 +1,168 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+
+    container:
+      image: node:22
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+  setup-config:
+    needs: install
+    runs-on: ubuntu-latest
+
+    container:
+      image: node:18
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup config files
+        run: |
+          mkdir -p config
+          echo '{
+            "port": 200,
+            "myAddress": "http://localhost:8080",
+            "corsOrigin": ["http://localhost:3005"]
+          }' > config/devConfig.json
+          cp config/devConfig.json config/prodConfig.json
+          cp config/devConfig.json config/testConfig.json
+
+      - name: Upload config
+        uses: actions/upload-artifact@v4
+        with:
+          name: config
+          path: config/
+
+  test:
+    needs: [setup-config]
+    runs-on: ubuntu-latest
+
+    container:
+      image: node:18
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+
+      - name: Download config
+        uses: actions/download-artifact@v4
+        with:
+          name: config
+          path: config/
+
+      - name: Run tests
+        run: npm install && npm run test:e2e && npm run test:unit && npm run test:db
+
+  lint:
+    needs: [setup-config]
+    runs-on: ubuntu-latest
+
+    container:
+      image: node:18
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+
+      - name: Download config
+        uses: actions/download-artifact@v4
+        with:
+          name: config
+          path: config/
+
+      - name: Lint
+        run: npm install && npm run lint
+
+  build:
+    needs: [setup-config, test, lint]
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: node:18
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+
+      - name: Download config
+        uses: actions/download-artifact@v4
+        with:
+          name: config
+          path: config/
+
+      - name: Build
+        run: npm install && npm run build
+
+  audit:
+    needs: [test, lint]
+
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    container:
+      image: node:18
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+
+      - name: Audit
+        run: npm install && npm audit

@@ -1,14 +1,7 @@
-import * as enums from '../enums';
-import express from 'express';
+import type { Locals } from 'express';
 
-export interface IUsersTokens {
-  userId: string | undefined;
-  tempId: string;
-  validated: boolean;
-  newToken?: string;
-  type: enums.USER_TYPES;
-}
+export interface IUserLocals extends Locals {
+  reqId: string;
 
-export interface ILocalUser extends express.Response {
-  locals: IUsersTokens;
+  [key: string]: unknown;
 }

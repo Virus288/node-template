@@ -1,62 +1,96 @@
 {
-  "name": "node_template",
-  "version": "0.0.1",
-  "description": "Node template",
-  "productName": "Node_template",
+  "name": "NodeTemplate",
+  "version": "0.2.0",
+  "description": "NodeTemplate",
+  "productName": "NodeTemplate",
   "author": "https://github.com/Virus288",
   "license": "Apache-2.0",
   "private": false,
+  "type": "module",
+  "main": "build/main.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=prod node build/src/main.js",
-    "dev": "cross-env NODE_ENV=dev nodemon build/src/main.js",
-    "clean": "rimraf coverage build tmp",
-    "prebuild": "npm run lint",
-    "build": "tsc -p tsconfig.release.json",
-    "build:watch": "tsc -w -p tsconfig.release.json",
-    "lint": "cross-env NODE_ENV=development eslint . --ext .ts",
-    "listErrors": "node_modules/.bin/tsc --noEmit --skipLibCheck",
-    "prepare": "husky install"
+    "start": "cross-env node build/src/main.js",
+    "start:dev": "concurrently 'npm run build:watch' 'cross-env NODE_ENV=development nodemon build/src/main.js'",
+    "start:testDev": "cross-env NODE_ENV=testDev node src/main.js",
+    "build": "tsc -p tsconfig.json",
+    "build:watch": "tsc -w -p tsconfig.json",
+    "lint": "cross-env NODE_ENV=development eslint -c eslint.config.mjs . --fix",
+    "listErrors": "node_modules/.bin/tsc --skipLibCheck",
+    "lintStaged": "npx lint-staged",
+    "test": "echo 'If you want to run all the tests, please use makefile'",
+    "test:e2e": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --runInBand --config __tests__/jest.config.e2e.ts",
+    "test:unit": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --config __tests__/jest.config.unit.ts",
+    "test:db": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --runInBand --config __tests__/jest.config.db.ts"
   },
+  "dependencies": {
+    "chalk": "5.3.0",
+    "cors": "^2.8.5",
+    "express": "4.21.0",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.0.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "3.15.0",
+    "winston-daily-rotate-file": "5.0.0"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.1.1",
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.9.0",
+    "@jest/globals": "29.7.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "5.0.0",
+    "@types/express-rate-limit": "^5.1.3",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "22.7.4",
+    "@types/supertest": "^6.0.2",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.6",
+    "@typescript-eslint/eslint-plugin": "8.8.1",
+    "@typescript-eslint/parser": "8.8.0",
+    "concurrently": "^9.0.1",
+    "cross-env": "7.0.3",
+    "eslint": "9.12.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-check-file": "2.8.0",
+    "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-jest": "28.8.3",
+    "eslint-plugin-jsdoc": "^50.0.0",
+    "eslint-plugin-prettier": "5.2.1",
+    "eslint-plugin-sort-class-members": "1.20.0",
+    "jest": "29.7.0",
+    "jest-config": "29.7.0",
+    "nodemon": "3.1.7",
+    "prettier": "3.3.3",
+    "supertest": "^7.0.0",
+    "ts-jest": "29.2.5",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.7.2",
+    "typescript": "5.6.2"
+  },
+  "keywords": [
+    "node template",
+    "node.js template",
+    "nodejs template",
+    "template",
+    "node",
+    "nodejs",
+    "node.js"
+  ],
   "lint-staged": {
-    "*.{ts}": [
+    "*.ts": [
       "cross-env NODE_ENV=development eslint --cache"
     ],
     "*.json,.{eslintrc,prettierrc}": [
       "prettier --ignore-path .eslintignore --parser json --write"
     ]
   },
-  "dependencies": {
-    "chalk": "^4.1.2",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "express": "^4.18.1",
-    "jsonwebtoken": "^8.5.1",
-    "lint-staged": "^13.0.3",
-    "node": "^18.7.0",
-    "winston": "^3.8.2",
-    "winston-daily-rotate-file": "^4.7.1"
+  "overrides": {
+    "express": {
+      "cookie": "0.7.2"
+    }
   },
-  "devDependencies": {
-    "@types/cookie-parser": "^1.4.3",
-    "@types/cors": "^2.8.12",
-    "@types/express": "^4.17.13",
-    "@types/jsonwebtoken": "^8.5.8",
-    "@types/node": "^18.6.2",
-    "@typescript-eslint/eslint-plugin": "^5.42.1",
-    "@typescript-eslint/parser": "^5.42.1",
-    "cross-env": "^7.0.3",
-    "eslint": "^8.20.0",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^8.0.1",
-    "nodemon": "^2.0.20",
-    "prettier": "^2.4.1",
-    "rimraf": "^3.0",
-    "supertest": "^6.2.4",
-    "ts-node": "^10.9.1",
-    "tsutils": "^3.21.0",
-    "typescript": "^4.7.0"
+  "engines": {
+    "node": ">=16"
   }
 }

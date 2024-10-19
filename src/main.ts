@@ -1,24 +1,63 @@
-import Router from './router';
-import State from './tools/state';
-import errLogger from './tools/logger/logger';
-import Log from './tools/logger/log';
+import Router from './connections/router/index.js';
+import Liveness from './tools/liveness.js';
+import Log from './tools/logger/index.js';
+import State from './tools/state.js';
+import type { IFullError } from './types/index.js';
 
 class App {
-  private router: Router | undefined;
+  private _liveness: Liveness | undefined;
+
+  private get liveness(): Liveness | undefined {
+    return this._liveness;
+  }
+
+  private set liveness(val: Liveness | undefined) {
+    this._liveness = val;
+  }
 
   init(): void {
     try {
-      this.router = new Router();
-      State.Router = this.router;
-      this.router.init();
+      this.handleInit();
     } catch (err) {
-      Log.log('Server', 'Err while initializing app');
-      Log.log('Server', JSON.stringify(err));
-      errLogger.error(err);
-      errLogger.error(JSON.stringify(err));
+      const { stack, message } = err as IFullError | Error;
+      Log.error('Server', 'Err while initializing app', message, stack);
 
-      State.Router.close();
+      this.close();
     }
+  }
+
+  private close(): void {
+    State.alive = false;
+    State.kill();
+
+    this.liveness?.close();
+  }
+
+  private handleInit(): void {
+    const router = new Router();
+
+    State.router = router;
+
+    router.init();
+
+    Log.log('Server', 'Server started');
+
+    this.liveness = new Liveness();
+    this.liveness.init();
+    this.listenForSignals();
+
+    State.alive = true;
+  }
+
+  private listenForSignals(): void {
+    process.on('SIGTERM', () => {
+      Log.log('Server', 'Received signal SIGTERM. Gracefully closing');
+      this.close();
+    });
+    process.on('SIGINT', () => {
+      Log.log('Server', 'Received signal SIGINT. Gracefully closing');
+      this.close();
+    });
   }
 }
 

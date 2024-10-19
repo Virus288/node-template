@@ -1,10 +1,6 @@
-import Router from '../router';
+import type Router from '../connections/router/index.js'
 
 export interface IState {
-  Router: Router;
-}
-
-export interface IConfigInterface {
-  httpPort: number;
-  corsOrigin: string;
+  router: Router;
+  alive: boolean;
 }

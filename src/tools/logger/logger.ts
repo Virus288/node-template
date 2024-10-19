@@ -1,13 +1,13 @@
 import * as winston from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
-import * as errors from '../../errors';
+import * as errors from '../../errors/index.js';
 
 let path = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
 const cache = process.platform === 'win32' ? 'AppData/Roaming/' : '.cache';
 const name = process.env.APP_NAME ?? process.env.npm_package_name;
-path += `/${cache}/${name}/`;
+path += `/${cache}/${name!}/`;
 
-if (!path) throw new errors.MissingProcessPlatform();
+if (!path) throw new errors.MissingProcessPlatformError();
 const levels = ['error', 'warn', 'info'];
 
 const errLogger = winston.createLogger({

@@ -1,10 +1,14 @@
 FROM node:18
-ENV NODE_ENV prod
+ARG NODE_ENV
+ENV NODE_ENV ${NODE_ENV:-production}
 
 WORKDIR /usr/src/app
-COPY package.json /usr/src/app
-ADD . /usr/src/app
-RUN npm run build
+ADD package.json /usr/src/app
+RUN npm install
 
-CMD [ "node", "./build/src/main.js" ]
-EXPOSE 3000
+ADD build /usr/src/app
+
+ADD start.sh /usr/src/app
+RUN chmod +x /usr/src/app/start.sh
+
+CMD ["/usr/src/app/start.sh"]
