@@ -1,0 +1,30 @@
+name: Feature Request
+description: Suggest an idea for this project
+title: "[Feature]: "
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: Before submitting new issue, please make sure similar problem/idea hasn't been already submitted by someone else. 😃
+
+  - type: dropdown
+    attributes:
+      multiple: false
+      label: Feature type
+      description: What kind of feature would you like to request.
+      options:
+        - "New Feature"
+        - "Documentation"
+        - "Code Refactor"
+        - "Performance Improvements"
+        - "New Test"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Try to give us detailed description of what you like us to improve/implement
+    validations:
+      required: true
