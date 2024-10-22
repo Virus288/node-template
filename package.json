@@ -1,6 +1,6 @@
 {
   "name": "NodeTemplate",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "NodeTemplate",
   "productName": "NodeTemplate",
   "author": "https://github.com/Virus288",
@@ -10,7 +10,7 @@
   "main": "build/main.js",
   "scripts": {
     "start": "cross-env node build/src/main.js",
-    "start:dev": "concurrently 'npm run build:watch' 'cross-env NODE_ENV=development nodemon build/src/main.js'",
+    "start:dev": "concurrently 'npm run build:watch' 'cross-env NODE_ENV=development node --watch build/src/main.js'",
     "start:testDev": "cross-env NODE_ENV=testDev node src/main.js",
     "build": "tsc -p tsconfig.json",
     "build:watch": "tsc -w -p tsconfig.json",
@@ -60,7 +60,6 @@
     "eslint-plugin-sort-class-members": "1.20.0",
     "jest": "29.7.0",
     "jest-config": "29.7.0",
-    "nodemon": "3.1.7",
     "prettier": "3.3.3",
     "supertest": "^7.0.0",
     "ts-jest": "29.2.5",
@@ -85,12 +84,7 @@
       "prettier --ignore-path .eslintignore --parser json --write"
     ]
   },
-  "overrides": {
-    "express": {
-      "cookie": "0.7.2"
-    }
-  },
   "engines": {
-    "node": ">=16"
+    "node": ">=19"
   }
 }
