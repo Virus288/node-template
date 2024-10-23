@@ -1,9 +1,9 @@
 # Node.js template
 
-This project is simple node.js template built with typescript. Its extremally simple and includes only most necessary prackages to make your work faster. This template uses ESM. Keep this in mind while working with this project. For some reason people do not know what esm is.
+This project is a simple node.js template built with typescript. Its extremally simple and includes only the most necessary packages to make your work faster. This template uses ESM. Keep this in mind while working on this project. For some reason, people do not know what esm is.
 
 Warning!.
-This package uses extremally strict eslint, which I modified to my needs. Please take a look and modify it however you like. My style of writing code might not be for you.
+This package uses extremely strict eslint, which I modified to my needs. Please take a look and modify it however you like. My style of writing code might not be for you.
 
 TLDR:
 0. [Key packages](#0-key-packages)
