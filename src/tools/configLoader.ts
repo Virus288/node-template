@@ -1,4 +1,3 @@
-import Log from './logger/index.js';
 import type * as types from '../types/index.js';
 import fs from 'fs';
 
@@ -21,7 +20,6 @@ const preValidate = (config: types.IConfigInterface): void => {
  * @throws Error that no config was found.
  */
 export default function getConfig(): types.IConfigInterface {
-  Log.log('Config loader', `Getting config for env ${process.env.NODE_ENV}`);
   let config: Partial<types.IConfigInterface> = {};
 
   switch (process.env.NODE_ENV) {
