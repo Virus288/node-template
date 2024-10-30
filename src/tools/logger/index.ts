@@ -30,10 +30,82 @@ export default class Log {
     });
   }
 
+  static decorateError<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
+    return function (
+      target: (this: This, ...args: Args) => Return | Promise<Return>,
+      _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return | Promise<Return>>,
+    ): (this: This, ...args: Args) => Promise<Return> {
+      return async function (this: This, ...args: Args): Promise<Return> {
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        const result = await target.apply(this, args);
+
+        messages.forEach((m) => {
+          Log.buildLog(() => chalk.red(`Log.ERROR: ${targetMessage}`), enums.ELogTypes.Error, m);
+        });
+        return result;
+      };
+    };
+  }
+
+  static decorateSyncError<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
+    return function (
+      target: (this: This, ...args: Args) => Return,
+      _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>,
+    ): (this: This, ...args: Args) => Return {
+      return function (this: This, ...args: Args): Return {
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        const result = target.apply(this, args);
+
+        messages.forEach((m) => {
+          Log.buildLog(() => chalk.red(`Log.ERROR: ${targetMessage}`), enums.ELogTypes.Error, m);
+        });
+        return result;
+      };
+    };
+  }
+
   static warn(target: string, ...messages: unknown[]): void {
     messages.forEach((m) => {
       Log.buildLog(() => chalk.yellow(`Log.WARN: ${target}`), enums.ELogTypes.Warn, m);
     });
+  }
+
+  static decorateWarn<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
+    return function (
+      target: (this: This, ...args: Args) => Return | Promise<Return>,
+      _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return | Promise<Return>>,
+    ): (this: This, ...args: Args) => Promise<Return> {
+      return async function (this: This, ...args: Args): Promise<Return> {
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        const result = await target.apply(this, args);
+
+        messages.forEach((m) => {
+          Log.buildLog(() => chalk.yellow(`Log.WARN: ${targetMessage}`), enums.ELogTypes.Warn, m);
+        });
+        return result;
+      };
+    };
+  }
+
+  static decorateSyncWarn<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
+    return function (
+      target: (this: This, ...args: Args) => Return,
+      _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>,
+    ): (this: This, ...args: Args) => Return {
+      return function (this: This, ...args: Args): Return {
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        const result = target.apply(this, args);
+
+        messages.forEach((m) => {
+          Log.buildLog(() => chalk.yellow(`Log.WARN: ${targetMessage}`), enums.ELogTypes.Warn, m);
+        });
+        return result;
+      };
+    };
   }
 
   static log(target: string, ...messages: unknown[]): void {
@@ -42,17 +114,82 @@ export default class Log {
     });
   }
 
+  static decorateLog<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
+    return function (
+      target: (this: This, ...args: Args) => Return | Promise<Return>,
+      _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return | Promise<Return>>,
+    ): (this: This, ...args: Args) => Promise<Return> {
+      return async function (this: This, ...args: Args): Promise<Return> {
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        const result = await target.apply(this, args);
+
+        messages.forEach((m) => {
+          Log.buildLog(() => chalk.blue(`Log.LOG: ${targetMessage}`), enums.ELogTypes.Log, m);
+        });
+        return result;
+      };
+    };
+  }
+
+  static decorateSyncLog<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
+    return function (
+      target: (this: This, ...args: Args) => Return,
+      _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>,
+    ): (this: This, ...args: Args) => Return {
+      return function (this: This, ...args: Args): Return {
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        const result = target.apply(this, args);
+
+        messages.forEach((m) => {
+          Log.buildLog(() => chalk.blue(`Log.LOG: ${targetMessage}`), enums.ELogTypes.Log, m);
+        });
+        return result;
+      };
+    };
+  }
+
   static debug(target: string, ...messages: unknown[]): void {
     messages.forEach((m) => {
       Log.buildLog(() => chalk.magenta(`Log.Debug: ${target}`), enums.ELogTypes.Debug, m);
     });
   }
 
-  static trace(target: string, ...messages: unknown[]): void {
-    console.trace(chalk.yellowBright(target));
-    messages.forEach((m) => {
-      Log.buildLog(() => chalk.yellowBright(`Log.TRACE: ${target}`), enums.ELogTypes.Log, m);
-    });
+  static decorateDebug<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
+    return function (
+      target: (this: This, ...args: Args) => Promise<Return>,
+      _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Promise<Return>>,
+    ): (this: This, ...args: Args) => Promise<Return> {
+      return async function (this: This, ...args: Args): Promise<Return> {
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        const result = await target.apply(this, args);
+
+        messages.forEach((m) => {
+          Log.buildLog(() => chalk.magenta(`Log.Debug: ${targetMessage}`), enums.ELogTypes.Debug, m);
+        });
+        return result;
+      };
+    };
+  }
+
+  static decorateSyncDebug<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
+    return function (
+      target: (this: This, ...args: Args) => Return,
+      _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>,
+    ): (this: This, ...args: Args) => Return {
+      return function (this: This, ...args: Args): Return {
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        const result = target.apply(this, args);
+
+        messages.forEach((m) => {
+          Log.buildLog(() => chalk.magenta(`Log.Debug: ${targetMessage}`), enums.ELogTypes.Debug, m);
+        });
+        return result;
+      };
+    };
   }
 
   static time(target: string, ...messages: unknown[]): void {
@@ -78,6 +215,84 @@ export default class Log {
     messages.forEach((m) => {
       Log.buildLog(() => chalk.bgBlue(`Log.TIME: ${target}`), enums.ELogTypes.Log, m);
     });
+  }
+
+  static decorateTime<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
+    return function (
+      target: (this: This, ...args: Args) => Return | Promise<Return>,
+      _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return | Promise<Return>>,
+    ): (this: This, ...args: Args) => Promise<Return> {
+      return async function (this: This, ...args: Args): Promise<Return> {
+        const start = Date.now();
+
+        messages.forEach((m) => {
+          Log.buildLog(() => chalk.bgBlue(`Log.TIME: ${targetMessage}`), enums.ELogTypes.Log, m);
+        });
+
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        const result = await target.apply(this, args);
+
+        Log.buildLog(
+          () => chalk.bgBlue(`Log.TIME: ${targetMessage}`),
+          enums.ELogTypes.Log,
+          `Time passed: ${((Date.now() - start) / 1000).toFixed(2)}s`,
+        );
+        return result;
+      };
+    };
+  }
+
+  static decorateSyncTime<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
+    return function (
+      target: (this: This, ...args: Args) => Return,
+      _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>,
+    ): (this: This, ...args: Args) => Return {
+      return function (this: This, ...args: Args): Return {
+        const start = Date.now();
+
+        messages.forEach((m) => {
+          Log.buildLog(() => chalk.bgBlue(`Log.TIME: ${targetMessage}`), enums.ELogTypes.Log, m);
+        });
+
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        const result = target.apply(this, args);
+
+        Log.buildLog(
+          () => chalk.bgBlue(`Log.TIME: ${targetMessage}`),
+          enums.ELogTypes.Log,
+          `Time passed: ${((Date.now() - start) / 1000).toFixed(2)}s`,
+        );
+        return result;
+      };
+    };
+  }
+
+  static trace(target: string, ...messages: unknown[]): void {
+    console.trace(chalk.yellowBright(target));
+    messages.forEach((m) => {
+      Log.buildLog(() => chalk.yellowBright(`Log.TRACE: ${target}`), enums.ELogTypes.Log, m);
+    });
+  }
+
+  static decorateTrace<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
+    return function (
+      target: (this: This, ...args: Args) => Return | Promise<Return>,
+      _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return | Promise<Return>>,
+    ): (this: This, ...args: Args) => Promise<Return> {
+      return async function (this: This, ...args: Args): Promise<Return> {
+        console.trace(chalk.yellowBright(target));
+        messages.forEach((m) => {
+          Log.buildLog(() => chalk.yellowBright(`Log.TRACE: ${targetMessage}`), enums.ELogTypes.Log, m);
+        });
+
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        const result = target.apply(this, args);
+        return result;
+      };
+    };
   }
 
   private static buildLog(color: () => string, type: enums.ELogTypes, message: unknown): void {
