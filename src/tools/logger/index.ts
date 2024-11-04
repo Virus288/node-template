@@ -151,6 +151,7 @@ export default class Log {
   }
 
   static debug(target: string, ...messages: unknown[]): void {
+    if (process.env.NODE_ENV === 'production') return;
     messages.forEach((m) => {
       Log.buildLog(() => chalk.magenta(`Log.Debug: ${target}`), enums.ELogTypes.Debug, m);
     });
@@ -162,6 +163,10 @@ export default class Log {
       _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Promise<Return>>,
     ): (this: This, ...args: Args) => Promise<Return> {
       return async function (this: This, ...args: Args): Promise<Return> {
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        if (process.env.NODE_ENV === 'production') return target.apply(this, args);
+
         // Borked rule in this example
         // eslint-disable-next-line no-invalid-this
         const result = await target.apply(this, args);
@@ -180,6 +185,10 @@ export default class Log {
       _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>,
     ): (this: This, ...args: Args) => Return {
       return function (this: This, ...args: Args): Return {
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        if (process.env.NODE_ENV === 'production') return target.apply(this, args);
+
         // Borked rule in this example
         // eslint-disable-next-line no-invalid-this
         const result = target.apply(this, args);
@@ -243,12 +252,72 @@ export default class Log {
     };
   }
 
+  static decorateDebugTime<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
+    return function (
+      target: (this: This, ...args: Args) => Return | Promise<Return>,
+      _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return | Promise<Return>>,
+    ): (this: This, ...args: Args) => Promise<Return> {
+      return async function (this: This, ...args: Args): Promise<Return> {
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        if (process.env.NODE_ENV === 'production') return target.apply(this, args);
+
+        const start = Date.now();
+
+        messages.forEach((m) => {
+          Log.buildLog(() => chalk.bgBlue(`Log.TIME: ${targetMessage}`), enums.ELogTypes.Log, m);
+        });
+
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        const result = await target.apply(this, args);
+
+        Log.buildLog(
+          () => chalk.bgBlue(`Log.TIME: ${targetMessage}`),
+          enums.ELogTypes.Log,
+          `Time passed: ${((Date.now() - start) / 1000).toFixed(2)}s`,
+        );
+        return result;
+      };
+    };
+  }
+
   static decorateSyncTime<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
     return function (
       target: (this: This, ...args: Args) => Return,
       _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>,
     ): (this: This, ...args: Args) => Return {
       return function (this: This, ...args: Args): Return {
+        const start = Date.now();
+
+        messages.forEach((m) => {
+          Log.buildLog(() => chalk.bgBlue(`Log.TIME: ${targetMessage}`), enums.ELogTypes.Log, m);
+        });
+
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        const result = target.apply(this, args);
+
+        Log.buildLog(
+          () => chalk.bgBlue(`Log.TIME: ${targetMessage}`),
+          enums.ELogTypes.Log,
+          `Time passed: ${((Date.now() - start) / 1000).toFixed(2)}s`,
+        );
+        return result;
+      };
+    };
+  }
+
+  static decorateDebugSyncTime<This, Args extends unknown[], Return>(targetMessage: string, ...messages: unknown[]) {
+    return function (
+      target: (this: This, ...args: Args) => Return,
+      _context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>,
+    ): (this: This, ...args: Args) => Return {
+      return function (this: This, ...args: Args): Return {
+        // Borked rule in this example
+        // eslint-disable-next-line no-invalid-this
+        if (process.env.NODE_ENV === 'production') return target.apply(this, args);
+
         const start = Date.now();
 
         messages.forEach((m) => {
