@@ -35,7 +35,7 @@ export default class Middleware {
           directives: {
             ...helmetDirectives,
             'form-action': ["'self'", ...allowedUrls],
-            'script-src': ["'self'", "'unsafe-inline'"],
+            'script-src': ["'self'"],
             'default-src': ["'self'", 'data:'],
             'frame-ancestors': ["'self'", ...allowedUrls],
             'frame-src': ["'self'", ...allowedUrls],
