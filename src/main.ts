@@ -33,6 +33,7 @@ class App {
     this.liveness?.close();
   }
 
+  @Log.decorateSyncTime('Server started')
   private handleInit(): void {
     const router = new Router();
 

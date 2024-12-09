@@ -26,6 +26,9 @@ export default class AppRouter {
     initTestRoutes(this.router);
   }
 
+  /*
+   * Init health routes.
+   */
   initHealh(): void {
     this.router.get('/health', (_req, res) => {
       const { alive } = State;
@@ -34,12 +37,18 @@ export default class AppRouter {
     });
   }
 
+  /*
+   * Init not found routes.
+   */
   initFourOhFour(): void {
     this.router.all('*', (_req, res) => {
       handleErr(new FourOhFour(), res);
     });
   }
 
+  /*
+   * Initialize swagger documentaion routes
+   */
   generateDocumentation(): void {
     const jsonPackage = JSON.parse(fs.readFileSync('package.json').toString()) as Record<string, string>;
     const options: swaggerJsdoc.Options = {
