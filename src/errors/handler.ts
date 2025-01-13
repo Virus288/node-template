@@ -1,5 +1,5 @@
+import Log from 'simpl-loggar';
 import { InternalError } from './index.js';
-import Log from '../tools/logger/index.js';
 import type * as types from '../types/index.js';
 import type express from 'express';
 

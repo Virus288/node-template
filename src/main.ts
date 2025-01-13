@@ -1,6 +1,6 @@
+import Log from 'simpl-loggar';
 import Router from './connections/router/index.js';
 import Liveness from './tools/liveness.js';
-import Log from './tools/logger/index.js';
 import State from './tools/state.js';
 import type { IFullError } from './types/index.js';
 

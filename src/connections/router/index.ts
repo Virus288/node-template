@@ -1,8 +1,8 @@
 import express from 'express';
+import Log from 'simpl-loggar';
 import Middleware from './middleware.js';
 import AppRouter from './router.js';
 import getConfig from '../../tools/configLoader.js';
-import Log from '../../tools/logger/index.js';
 import http from 'http';
 
 export default class Router {

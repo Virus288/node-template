@@ -1,10 +1,9 @@
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
+import Log from 'simpl-loggar';
 import * as errors from '../../errors/index.js';
 import getConfig from '../../tools/configLoader.js';
-import Log from '../../tools/logger/index.js';
-import errLogger from '../../tools/logger/logger.js';
 import type { IFullError } from '../../types/index.js';
 import type { IResponse } from '../../types/requests.js';
 import type { Express } from 'express';
@@ -103,10 +102,7 @@ export default class Middleware {
   generateErrHandler(app: Express): void {
     app.use(
       (err: express.Errback | IFullError, req: express.Request, res: express.Response, _next: express.NextFunction) => {
-        errLogger
-          .error('Caught new generic error')
-          .error(`Caused by ${req.ip ?? 'unknown ip'}`)
-          .error(JSON.stringify(err));
+        Log.error('Caught new generic error', `Caused by ${req.ip ?? 'unknown ip'}`, JSON.stringify(err));
         const error = err as IFullError;
 
         if (error.message.includes('is not valid JSON')) {
