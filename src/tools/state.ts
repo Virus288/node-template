@@ -1,4 +1,4 @@
-import Log from './logger/index.js';
+import Log from 'simpl-loggar';
 import type Router from '../connections/router/index.js';
 import type { IState } from '../types/index.js';
 
